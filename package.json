@@ -1,0 +1,28 @@
+{
+  "name": "node-require-directory",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://Pampattitude@github.com/Pampattitude/node-require-directory.git"
+  },
+  "keywords": [
+    "node",
+    "nodejs",
+    "node.js",
+    "js",
+    "javascript",
+    "require",
+    "dir",
+    "directory",
+    "folder",
+    "recursive"
+  ],
+  "author": "Pampattitude",
+  "license": "LGPL",
+  "readmeFilename": "README.md"
+}
