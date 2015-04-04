@@ -24,11 +24,20 @@ var getDirectoryContent = function(dir) {
 };
 
 // Returns `true` if the file has a require()'able extension
-var glExtensions = Object.keys(require.extensions);
-var isRequirableFile = function(file) {
-    return -1 !== glExtensions.indexOf(path.extname(file));
+var isRequirableFile = function(file, extensions) {
+    return -1 !== extensions.indexOf(path.extname(file));
 };
 
+// Options:
+// {
+//     debug: Boolean, default false
+//     defer: Boolean, default true
+//     extensions: Array, default Object.keys(require.extensions)
+//     onlyFiles: Boolean, default true
+//     recursive: Boolean, default false
+//     requireFunction: Function, default require
+//     stripExtension: Boolean, default true
+// }
 module.exports = function(dir, options) {
     options = options || {};
 
@@ -45,6 +54,10 @@ module.exports = function(dir, options) {
     // If true, will strip extension in field name in returned
     // object
     options.stripExtension = options.stripExtension || true;
+    // Require function
+    options.requireFunction = options.requireFunction || require;
+    // Accepted extensions
+    options.extensions = options.extensions || Object.keys(require.extensions);
 
     var dirContent = getDirectoryContent(dir);
 
@@ -65,21 +78,21 @@ module.exports = function(dir, options) {
 	if (options.recursive && fileStat.isDirectory())
 	    requiredFiles[elem] = module.exports(fullElemPath);
 	// Is not a Node.js require()'able file
-	else if (!isRequirableFile(fullElemPath)) {
+	else if (!isRequirableFile(fullElemPath, options.extensions)) {
 	    options.debug && console.log('Excluded "' + fullElemPath + '" because it is not requirable');
 	    return ; // Not requirable
 	}
 	// Deferred require()
 	else if (options.defer)
 	    Object.defineProperty(requiredFiles, elem, {
-		get: function() { return require(fullElemPath); },
+		get: function() { return options.requireFunction(fullElemPath); },
 		enumerable: true,
 		writable: true, // Because it should act like any other redefinable property
 		configurable: true, // Ditto
 	    });
 	// Default
 	else
-	    requiredFiles[elem] = require(fullElemPath);
+	    requiredFiles[elem] = options.requireFunction(fullElemPath);
     });
 
     return requiredFiles;
