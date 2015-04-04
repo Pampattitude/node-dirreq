@@ -1,12 +1,19 @@
 Node.js require directory module
 ================================
 
+Installation
+------------
+
+```
+npm install dirreq
+```
+
 Usage
 -----
 
 ```javascript
-var requireDirectory = require('require-directory');
-var requiredObject = requireDirectory(relativePath, options);
+var dirreq = require('dirreq');
+var requiredObject = dirreq(relativePath, options);
 ```
 
 Options
@@ -49,9 +56,8 @@ test
 
 ### Default
 ```javascript
-var requireDir = require('./index');
-
-var dirs = requireDir('./test');
+var dirreq = require('dirreq');
+var dirs = dirreq('./test');
 
 console.log(dirs);
 /*
@@ -63,9 +69,8 @@ console.log(dirs);
 
 ### Defer and no recursion
 ```javascript
-var requireDir = require('./index');
-
-var dirs = requireDir('./test', {
+var dirreq = require('dirreq');
+var dirs = dirreq('./test', {
     defer: true,
     recursive: false,
 });
