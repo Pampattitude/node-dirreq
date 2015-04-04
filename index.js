@@ -87,8 +87,6 @@ module.exports = function(dir, options) {
 	    Object.defineProperty(requiredFiles, elem, {
 		get: function() { return options.requireFunction(fullElemPath); },
 		enumerable: true,
-		writable: true, // Because it should act like any other redefinable property
-		configurable: true, // Ditto
 	    });
 	// Default
 	else
