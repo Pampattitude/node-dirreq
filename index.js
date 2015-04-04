@@ -42,22 +42,29 @@ module.exports = function(dir, options) {
     options = options || {};
 
     // If true, will output warnings on stdout
-    options.debug = options.debug || isInDebugMode() || false;
+    if (undefined === options.debug)
+	options.debug = isInDebugMode() || false;
     // If true, will look in subdirectories
-    options.recursive = options.recursive || true;
+    if (undefined === options.recursive)
+	options.recursive = true;
     // If true, will not require() the files directly, but files
     // will be required when accessed for the first time
-    options.defer = options.defer || false;
+    if (undefined === options.defer)
+	options.defer = false;
     // If true and options.recursive set to false, will not
     // require folders
-    options.onlyFiles = options.onlyFiles || true;
+    if (undefined === options.onlyFiles)
+	options.onlyFiles = true;
     // If true, will strip extension in field name in returned
     // object
-    options.stripExtension = options.stripExtension || true;
+    if (undefined === options.stripExtension)
+	options.stripExtension = true;
     // Require function
-    options.requireFunction = options.requireFunction || require;
+    if (undefined === options.requireFunction)
+	options.requireFunction = require;
     // Accepted extensions
-    options.extensions = options.extensions || Object.keys(require.extensions);
+    if (undefined === options.extensions)
+	options.extensions = Object.keys(require.extensions);
 
     var dirContent = getDirectoryContent(dir);
 
@@ -76,7 +83,7 @@ module.exports = function(dir, options) {
 
 	// Is a directory that needs to be recursed on
 	if (options.recursive && fileStat.isDirectory())
-	    requiredFiles[elem] = module.exports(fullElemPath);
+	    requiredFiles[elem] = module.exports(fullElemPath, options);
 	// Is not a Node.js require()'able file
 	else if (!isRequirableFile(fullElemPath, options.extensions)) {
 	    options.debug && console.log('Excluded "' + fullElemPath + '" because it is not requirable');
@@ -89,7 +96,7 @@ module.exports = function(dir, options) {
 		enumerable: true,
 	    });
 	// Default
-	else
+	else if (!options.onlyFiles || fileStat.isFile())
 	    requiredFiles[elem] = options.requireFunction(fullElemPath);
     });
 
