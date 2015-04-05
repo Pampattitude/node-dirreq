@@ -66,6 +66,20 @@ module.exports = function(dir, options) {
     if (undefined === options.extensions)
 	options.extensions = Object.keys(require.extensions);
 
+    // Resolve path, either from '/' or from caller
+    if (!options.caller_) {
+	if (path.isAbsolute(dir))
+	    options.caller_ = '/';
+	else {
+	    try {
+		options.caller_ = new Error().stack.split('\n')[2].match(/\(([^:]*).*\)/)[1];
+	    } catch (e) {
+		throw new Error('Could not get caller path: ' + e.message);
+	    }
+	}
+    }
+    dir = path.resolve(path.parse(options.caller_).dir, dir);
+
     var dirContent = getDirectoryContent(dir);
 
     var requiredFiles = {};
