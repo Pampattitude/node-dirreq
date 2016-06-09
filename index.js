@@ -72,7 +72,11 @@ module.exports = function(dir, options) {
 	    options.caller_ = '/';
 	else {
 	    try {
-		options.caller_ = new Error().stack.split('\n')[2].match(/\(([^:]*).*\)/)[1];
+                var callStack = new Error().stack.split('\n')[2];
+                var callerMatches = callStack.match(/\(([^:]*).*\)/);
+                if (null === callerMatches)
+                    callerMatches = callStack.match(/at ([^:()]*):.*/)
+                options.caller_ = callerMatches[1];
 	    } catch (e) {
 		throw new Error('Could not get caller path: ' + e.message);
 	    }
