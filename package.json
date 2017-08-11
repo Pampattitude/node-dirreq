@@ -1,6 +1,6 @@
 {
   "name": "dirreq",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Node.js require directory module",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://Pampattitude@github.com/Pampattitude/node-require-directory.git"
+    "url": "https://github.com/Pampattitude/node-dirreq.git"
   },
   "keywords": [
     "node",
